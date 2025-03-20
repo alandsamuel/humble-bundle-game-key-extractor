@@ -1,0 +1,18 @@
+{
+  "manifest_version": 3,
+  "name": "Humble Bundle Key Extractor",
+  "version": "1.0",
+  "description": "Extract game names and CD keys from Humble Bundle",
+  "permissions": ["activeTab", "scripting"],
+  "host_permissions": ["*://*.humblebundle.com/*"],
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://*.humblebundle.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_end"
+    }
+  ]
+} 
