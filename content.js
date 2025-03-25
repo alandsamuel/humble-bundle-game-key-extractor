@@ -45,19 +45,14 @@ function extractGameTitle() {
     return gameKeys;
 }
 
-// Function to fetch Steam price
+// Function to fetch Steam price using background script
 async function fetchSteamPrice(gameName) {
-    try {
-        const response = await fetch(`https://store.steampowered.com/search/suggest?term=${encodeURIComponent(gameName)}&f=games&cc=id&l=english`);
-        const data = await response.text();
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(data, 'text/html');
-        const priceElement = doc.querySelector('.match_price');
-        return priceElement ? priceElement.textContent.trim() : 'N/A';
-    } catch (error) {
-        console.error('Error fetching Steam price:', error);
-        return 'N/A';
-    }
+    return new Promise((resolve) => {
+        chrome.runtime.sendMessage(
+            { action: "fetchSteamPrice", gameName },
+            response => resolve(response?.price || 'N/A')
+        );
+    });
 }
 
 // Listen for messages from the popup

@@ -61,10 +61,10 @@ th {
 
 /* Column widths */
 th:nth-child(1), td:nth-child(1) { width: 30%; } /* Game Title */
-th:nth-child(2), td:nth-child(2) { width: 25%; } /* CD Key */
-th:nth-child(3), td:nth-child(3) { width: 12%; } /* Month */
-th:nth-child(4), td:nth-child(4) { width: 12%; } /* Year */
-th:nth-child(5), td:nth-child(5) { width: 21%; } /* Steam Price */
+th:nth-child(2), td:nth-child(2) { width: 15%; } /* CD Key */
+th:nth-child(3), td:nth-child(3) { width: 9%; } /* Month */
+th:nth-child(4), td:nth-child(4) { width: 5%; } /* Year */
+th:nth-child(5), td:nth-child(5) { width: 17%; } /* Steam Price */
 
 td {
     vertical-align: middle;
