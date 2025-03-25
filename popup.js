@@ -23,6 +23,9 @@ document.addEventListener('DOMContentLoaded', async function() {
                 return;
             }
 
+            // Show loading state
+            gameTitleDiv.innerHTML = '<p>Loading game information...</p>';
+
             // Send message to content script
             chrome.tabs.sendMessage(tab.id, { action: "extractGameTitle" }, function(response) {
                 if (chrome.runtime.lastError) {
@@ -43,7 +46,6 @@ document.addEventListener('DOMContentLoaded', async function() {
         }
     });
 
-
     extractButton.addEventListener('click', async () => {
         try {
             // Get the active tab
@@ -53,6 +55,9 @@ document.addEventListener('DOMContentLoaded', async function() {
                 gameKeysDiv.innerHTML = '<p>Please navigate to a Humble Bundle page first.</p>';
                 return;
             }
+
+            // Show loading state
+            gameKeysDiv.innerHTML = '<p>Loading game information...</p>';
 
             // Send message to content script
             chrome.tabs.sendMessage(tab.id, { action: "extractKeys" }, function(response) {
@@ -83,72 +88,29 @@ document.addEventListener('DOMContentLoaded', async function() {
         }
 
         const table = document.createElement('table');
-        table.style.width = '100%';
-        table.style.borderCollapse = 'collapse';
-        
-        // Create header row
-        const headerRow = document.createElement('tr');
-        const gameHeader = document.createElement('th');
-        gameHeader.textContent = 'Game';
-        gameHeader.style.textAlign = 'left';
-        gameHeader.style.padding = '8px';
-        gameHeader.style.borderBottom = '1px solid #ddd';
-        
-        const keyHeader = document.createElement('th');
-        keyHeader.textContent = 'Key';
-        keyHeader.style.textAlign = 'left';
-        keyHeader.style.padding = '8px';
-        keyHeader.style.borderBottom = '1px solid #ddd';
+        table.innerHTML = `
+            <thead>
+                <tr>
+                    <th>Game Title</th>
+                    <th>CD Key</th>
+                    <th>Month</th>
+                    <th>Year</th>
+                    <th>Steam Price (IDR)</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        `;
 
-        const monthHeader = document.createElement('th');
-        monthHeader.textContent = 'Month';
-        monthHeader.style.textAlign = 'left';
-        monthHeader.style.padding = '8px';
-        monthHeader.style.borderBottom = '1px solid #ddd';
-
-        const yearHeader = document.createElement('th');
-        yearHeader.textContent = 'Year';
-        yearHeader.style.textAlign = 'left';
-        yearHeader.style.padding = '8px';
-        yearHeader.style.borderBottom = '1px solid #ddd';
-        
-        headerRow.appendChild(gameHeader);
-        headerRow.appendChild(keyHeader);
-        headerRow.appendChild(monthHeader);
-        headerRow.appendChild(yearHeader);
-        table.appendChild(headerRow);
-        
-        // Add game rows
-        gameKeys.forEach(({ gameTitle, keyValue, Month, Year }) => {
+        gameKeys.forEach(({ gameTitle, keyValue, Month, Year, steamPrice }) => {
             const row = document.createElement('tr');
-            
-            const gameCell = document.createElement('td');
-            gameCell.textContent = gameTitle;
-            gameCell.style.padding = '8px';
-            gameCell.style.borderBottom = '1px solid #eee';
-            
-            const keyCell = document.createElement('td');
-            const keyCode = document.createElement('code');
-            keyCode.textContent = keyValue;
-            keyCell.appendChild(keyCode);
-            keyCell.style.padding = '8px';
-            keyCell.style.borderBottom = '1px solid #eee';
-
-            const monthCell = document.createElement('td');
-            monthCell.textContent = Month;
-            monthCell.style.padding = '8px';
-            monthCell.style.borderBottom = '1px solid #eee';
-            
-            const yearCell = document.createElement('td');
-            yearCell.textContent = Year;
-            yearCell.style.padding = '8px';
-            yearCell.style.borderBottom = '1px solid #eee'; 
-
-            row.appendChild(gameCell);
-            row.appendChild(keyCell);
-            row.appendChild(monthCell);
-            row.appendChild(yearCell);
-            table.appendChild(row);
+            row.innerHTML = `
+                <td><strong>${gameTitle}</strong></td>
+                <td><code>${keyValue || ''}</code></td>
+                <td>${Month || 'N/A'}</td>
+                <td>${Year || 'N/A'}</td>
+                <td>${steamPrice || 'N/A'}</td>
+            `;
+            table.querySelector('tbody').appendChild(row);
         });
 
         gameKeysDiv.appendChild(table);
